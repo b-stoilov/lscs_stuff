@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.recipes.model.Product;
 import com.example.recipes.repository.ProductRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
 public class ProductController {
@@ -29,6 +29,7 @@ public class ProductController {
 	@Autowired
 	ProductRepository productRepository;
 	
+	//get products
 	@GetMapping("/products")
 	public ResponseEntity<List<Product>> getAllProducts (@RequestParam(required = false) String name) {
 		try {
@@ -49,6 +50,73 @@ public class ProductController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
+	}
+	
+	
+	//get products by id 
+	@GetMapping("/products/{id}") 
+	public ResponseEntity<Product> getProductById (@PathVariable("id") long id) {
+		Optional<Product> productData = productRepository.findById(id);
+		
+		if (productData.isPresent()) {
+			Product _product = productData.get();
+			return new ResponseEntity<Product>(_product, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
+	//create products
+	@PostMapping("/products")
+	public ResponseEntity<Product> createProduct (@RequestBody Product product) {
+		try {
+			Product _product = productRepository
+					.save(new Product(product.getName()));
+			
+			return new ResponseEntity<>(_product, HttpStatus.CREATED); 
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	//update product
+	@PutMapping("/products/{id}")
+	public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @RequestBody Product product) {
+		Optional<Product> productData = productRepository.findById(id);
+		
+		if (productData.isPresent()) {
+			Product _product = productData.get();
+			_product.setName(product.getName());
+			
+			return new ResponseEntity<>(_product, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
+	//delete product by id
+	@DeleteMapping("/products/{id}")
+	public ResponseEntity<Product> deleteProduct(@PathVariable("id") long id) {
+		try {
+			productRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	//delete all products
+	@DeleteMapping("/products")
+	public ResponseEntity<HttpStatus> deleteAllProducts() {
+		try {
+			productRepository.deleteAll();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
