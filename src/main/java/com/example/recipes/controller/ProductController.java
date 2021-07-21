@@ -90,7 +90,7 @@ public class ProductController {
 			Product _product = productData.get();
 			_product.setName(product.getName());
 			
-			return new ResponseEntity<>(_product, HttpStatus.OK);
+			return new ResponseEntity<>(productRepository.save(_product), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -102,6 +102,7 @@ public class ProductController {
 	public ResponseEntity<Product> deleteProduct(@PathVariable("id") long id) {
 		try {
 			productRepository.deleteById(id);
+			
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
