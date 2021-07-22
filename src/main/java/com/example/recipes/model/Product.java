@@ -1,5 +1,7 @@
 package com.example.recipes.model;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,9 @@ public class Product {
 	
 	@Column(name = "name")
 	private String name;
+	
+	@OneToMany(mappedBy="product")
+	private Set<ProductUsage> prodUsages;
 	
 	public Product () {}
 	

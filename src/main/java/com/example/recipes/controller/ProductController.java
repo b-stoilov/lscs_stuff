@@ -29,6 +29,7 @@ public class ProductController {
 	@Autowired
 	ProductRepository productRepository;
 	
+	
 	//get products
 	@GetMapping("/products")
 	public ResponseEntity<List<Product>> getAllProducts (@RequestParam(required = false) String name) {
