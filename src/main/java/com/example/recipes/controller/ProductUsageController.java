@@ -66,11 +66,17 @@ public class ProductUsageController {
 			Optional<ProductUsage> productUsageData = prodUsageRepository.findById(id);
 			
 			if (productUsageData.isPresent()) {
-				ProductUsage _prodUsage = new ProductUsage(prodUsage.getProduct(),
-						   prodUsage.getProductQuantity(),
-						   prodUsage.getProductUOM(),
-						   prodUsage.getRecipeId()))
+				ProductUsage _prodUsage = productUsageData.get();
+				_prodUsage.setProduct(prodUsage.getProduct());
+				_prodUsage.setProductQuantity(prodUsage.getProductQuantity());
+				_prodUsage.setProductUOM(prodUsage.getProductUOM());
+				
+				return new ResponseEntity<>(prodUsageRepository.save(_prodUsage), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
+			
+			
 		
 	}
 

@@ -9,13 +9,14 @@ import javax.persistence.*;
 public class Product {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_generator")
+    @SequenceGenerator(name = "author_generator", sequenceName = "author_seq")
 	private long id;
 	
 	@Column(name = "name")
 	private String name;
 	
-	@OneToMany(mappedBy="product")
+	@OneToMany(mappedBy="product", cascade = CascadeType.ALL)
 	private Set<ProductUsage> prodUsages;
 	
 	public Product () {}

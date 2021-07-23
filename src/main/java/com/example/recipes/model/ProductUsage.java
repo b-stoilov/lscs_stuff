@@ -7,10 +7,10 @@ import javax.persistence.*;
 public class ProductUsage {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
 	private Product product;
 	
@@ -36,6 +36,10 @@ public class ProductUsage {
 
 	public long getId() {
 		return id;
+	}
+	
+	public void setProduct (Product product) {
+		this.product = product;
 	}
 	
 	public Product getProduct () {
