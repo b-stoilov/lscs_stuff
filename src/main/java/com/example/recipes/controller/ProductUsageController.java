@@ -75,9 +75,6 @@ public class ProductUsageController {
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
-			
-			
-		
 	}
 
 	@DeleteMapping("/product-usage/{id}")
@@ -90,5 +87,19 @@ public class ProductUsageController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@DeleteMapping("/product-usage")
+	public ResponseEntity<HttpStatus> deleteAllProdUs () {
+		try {
+			prodUsageRepository.deleteAll();
+			
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	
 
 }
