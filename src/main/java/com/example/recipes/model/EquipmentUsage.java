@@ -33,7 +33,7 @@ import com.example.recipes.repository.ProductUsageRepository;
 public class EquipmentUsage {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(generator = "eq_usg_gen")
 	private long id;
 	
 	@ManyToOne

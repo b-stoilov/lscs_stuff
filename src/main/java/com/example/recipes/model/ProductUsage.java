@@ -2,12 +2,15 @@ package com.example.recipes.model;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 @Entity
 @Table(name="productusage")
 public class ProductUsage {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "prod_usg_seq")
 	private long id;
 	
 	@ManyToOne

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.recipes.model.Product;
 import com.example.recipes.model.ProductUsage;
+import com.example.recipes.repository.ProductRepository;
 import com.example.recipes.repository.ProductUsageRepository;
 
 @CrossOrigin(origins = "http://localhost:8080")
@@ -27,6 +29,9 @@ public class ProductUsageController {
 	
 	@Autowired
 	ProductUsageRepository prodUsageRepository;
+	
+	@Autowired
+	ProductRepository productRepository;
 	
 	@GetMapping("/product-usage")
 	public ResponseEntity<List<ProductUsage>> getAllProductUsage () {
@@ -49,11 +54,13 @@ public class ProductUsageController {
 	@PostMapping("/product-usage")
 	public ResponseEntity<ProductUsage> createProductUsage (@RequestBody ProductUsage prodUsage) {
 		try {
+			Product _product = prodUsage.getProduct();
 			ProductUsage _prodUsage = prodUsageRepository
-					.save(new ProductUsage(prodUsage.getProduct(),
+					.save(new ProductUsage(_product,
 										   prodUsage.getProductQuantity(),
 										   prodUsage.getProductUOM(),
 										   prodUsage.getRecipeId()));
+			
 			
 			return new ResponseEntity<>(_prodUsage,  HttpStatus.OK);
 		} catch (Exception e) {

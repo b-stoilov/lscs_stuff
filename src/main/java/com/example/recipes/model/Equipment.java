@@ -10,8 +10,7 @@ import javax.persistence.*;
 public class Equipment {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_new_generator")
-    @SequenceGenerator(name = "author_new_generator", sequenceName = "author_new_seq")
+	@GeneratedValue(generator = "eq_gen")
 	private long id;
 	
 	@Column(name="e_name")

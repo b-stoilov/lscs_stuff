@@ -4,13 +4,18 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.id.enhanced.SequenceStyleGenerator;
+
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy.Strategy;
+
 @Entity
 @Table(name = "products")
 public class Product {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgen")
-    @SequenceGenerator(initialValue = 1, name = "name", sequenceName = "product_seq")
+	@GeneratedValue(generator = "prod_seq")
 	private long id;
 	
 	@Column(name = "name")
