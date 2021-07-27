@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.recipes.model.Equipment;
 import com.example.recipes.model.EquipmentUsage;
+import com.example.recipes.repository.EquipmentRepository;
 import com.example.recipes.repository.EquipmentUsageRepository;
 
 @CrossOrigin(origins = "http://localhost:8080")
@@ -24,6 +26,9 @@ public class EquipmentUsageController {
 	
 	@Autowired
 	EquipmentUsageRepository eqUsageRepository;
+	
+	@Autowired
+	EquipmentRepository eqRepository;
 	
 	@GetMapping("/equipment-usage")
 	public ResponseEntity<List<EquipmentUsage>> getAllEqUsages () {
@@ -47,8 +52,18 @@ public class EquipmentUsageController {
 	@PostMapping("/equipment-usage")
 	public ResponseEntity<EquipmentUsage> addUsage (@RequestBody EquipmentUsage equipmentUsage) {
 		try {
+			List<Equipment> equipments = eqRepository.findByNameContaining(equipmentUsage.getEquipment().getEquipmntName());
+			Equipment equipment;
+			
+			if (!equipments.isEmpty()) {
+				equipment = equipments.get(0);
+			} else {
+				equipment = new Equipment(equipmentUsage.getEquipment().getEquipmntName());
+				eqRepository.save(equipment);
+			}
+			
 			EquipmentUsage _eqUsage = eqUsageRepository
-					.save(new EquipmentUsage(equipmentUsage.getEquipment(), equipmentUsage.getRecipeId()));
+					.save(new EquipmentUsage(equipment, equipmentUsage.getRecipeId()));
 			
 			return new ResponseEntity<>(_eqUsage, HttpStatus.OK);
 		} catch (Exception e) {

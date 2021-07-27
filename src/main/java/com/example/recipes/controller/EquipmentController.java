@@ -45,10 +45,15 @@ public class EquipmentController {
 	@PostMapping("/equipment")
 	public ResponseEntity<Equipment> addEquipment (@RequestBody Equipment equipment) {
 		try {
-			Equipment _equipment = equipmentRepository
+			if (equipmentRepository.findByName(equipment.getEquipmntName()) == null) {
+				Equipment _equipment = equipmentRepository
 					.save(new Equipment(equipment.getEquipmntName()));
 			
-			return new ResponseEntity<>(_equipment, HttpStatus.OK);
+				return new ResponseEntity<>(_equipment, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

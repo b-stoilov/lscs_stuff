@@ -8,4 +8,5 @@ import com.example.recipes.model.Equipment;
 
 public interface EquipmentRepository extends JpaRepository<Equipment, Long>{
 	List<Equipment> findByNameContaining(String name);
+	Equipment findByName(String name);
 }

@@ -37,7 +37,7 @@ public class EquipmentUsage {
 	private long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "p_id", referencedColumnName = "id")
+	@JoinColumn(name = "e_id", referencedColumnName = "id")
 	private Equipment equipment;
 	
 	@Column(name="r_id")
