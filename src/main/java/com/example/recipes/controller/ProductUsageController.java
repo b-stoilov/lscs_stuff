@@ -54,12 +54,10 @@ public class ProductUsageController {
 	@PostMapping("/product-usage")
 	public ResponseEntity<ProductUsage> createProductUsage (@RequestBody ProductUsage prodUsage) {
 		try {
-			List<Product> products = productRepository.findByNameContaining(prodUsage.getProduct().getName());
-			Product product;
+			Product product = productRepository.findByName(prodUsage.getProduct().getName());
 			
-			if (!products.isEmpty()) {
-				product = products.get(0);
-			} else {
+			
+			if (product == null) {
 				product = new Product(prodUsage.getProduct().getName());
 				productRepository.save(product);
 			}

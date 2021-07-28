@@ -52,12 +52,10 @@ public class EquipmentUsageController {
 	@PostMapping("/equipment-usage")
 	public ResponseEntity<EquipmentUsage> addUsage (@RequestBody EquipmentUsage equipmentUsage) {
 		try {
-			List<Equipment> equipments = eqRepository.findByNameContaining(equipmentUsage.getEquipment().getEquipmntName());
-			Equipment equipment;
+			Equipment equipment = eqRepository.findByName(equipmentUsage.getEquipment().getEquipmntName());
 			
-			if (!equipments.isEmpty()) {
-				equipment = equipments.get(0);
-			} else {
+			
+			if (equipment == null) {
 				equipment = new Equipment(equipmentUsage.getEquipment().getEquipmntName());
 				eqRepository.save(equipment);
 			}
