@@ -17,7 +17,6 @@ import com.example.recipes.helpclasses.RecipeStepId;
 
 @Entity
 @Table(name = "recipestep")
-@IdClass(RecipeStepId.class)
 public class RecipeStep {
 	
 	@Id

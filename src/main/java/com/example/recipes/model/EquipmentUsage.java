@@ -28,6 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.recipes.model.ProductUsage;
 import com.example.recipes.repository.ProductUsageRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name="equipmentusage")
@@ -70,11 +74,9 @@ public class EquipmentUsage {
 	}
 	
 	
-
 	public long getRecipeIdd() {
 		return recipeIdd;
 	}
-
 
 	public void setRecipeIdd(long recipeIdd) {
 		this.recipeIdd = recipeIdd;

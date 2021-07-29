@@ -66,7 +66,7 @@ public class ProductUsageController {
 		try {
 			Product product = productRepository.findByName(prodUsage.getProduct().getName());
 			Uom uom = uomRepository.findByName(prodUsage.getProductUOM().getUomName());
-			Recipe recipe = recipeRepository.findByName(prodUsage.getRecipe().getName());
+			Recipe recipe = recipeRepository.findById(prodUsage.getRecipeIdd());
 			
 			if (product == null) {
 				product = new Product(prodUsage.getProduct().getName());

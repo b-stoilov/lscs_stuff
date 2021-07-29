@@ -28,6 +28,9 @@ public class ProductUsage {
 	@JoinColumn(name="recipe_id", referencedColumnName = "id")
 	private Recipe recipe;
 	
+	@Transient
+	private long recipeIdd;
+	
 	public ProductUsage () {}
 	
 	public ProductUsage(Product product, double productQuantity, Uom productUOM, Recipe recipe) {
@@ -35,6 +38,13 @@ public class ProductUsage {
 		this.productQuantity = productQuantity;
 		this.productUOM = productUOM;
 		this.recipe = recipe;
+	}
+	
+	public ProductUsage(Product product, double productQuantity, Uom productUOM, long recipeIdd) {
+		this.product = product;
+		this.productQuantity = productQuantity;
+		this.productUOM = productUOM;
+		this.recipeIdd = recipeIdd;
 	}
 
 	public long getId() {
@@ -71,6 +81,14 @@ public class ProductUsage {
 
 	public void setRecipe(Recipe recipe) {
 		this.recipe = recipe;
+	}
+	
+	public long getRecipeIdd() {
+		return recipeIdd;
+	}
+
+	public void setRecipeIdd(long recipeIdd) {
+		this.recipeIdd = recipeIdd;
 	}
 	
 	

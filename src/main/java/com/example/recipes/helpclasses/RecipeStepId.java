@@ -2,17 +2,20 @@ package com.example.recipes.helpclasses;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
 import com.example.recipes.model.Recipe;
 
-public class RecipeStepId implements Serializable {
-	private Recipe recipe;
+@Embeddable
+public class RecipeStepId {
+	private long id;
 
     private long sequence;
 
 	public RecipeStepId() {}
 
-	public RecipeStepId(Recipe recipe, long sequence) {
-		this.recipe = recipe;
+	public RecipeStepId(long id, long sequence) {
+		this.id = id;
 		this.sequence = sequence;
 	}
 
