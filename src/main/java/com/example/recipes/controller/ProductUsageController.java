@@ -19,8 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.recipes.model.Product;
 import com.example.recipes.model.ProductUsage;
+import com.example.recipes.model.Recipe;
+import com.example.recipes.model.Uom;
 import com.example.recipes.repository.ProductRepository;
 import com.example.recipes.repository.ProductUsageRepository;
+import com.example.recipes.repository.RecipeRepository;
+import com.example.recipes.repository.UomRepository;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
@@ -32,6 +36,12 @@ public class ProductUsageController {
 	
 	@Autowired
 	ProductRepository productRepository;
+	
+	@Autowired
+	UomRepository uomRepository;
+	
+	@Autowired
+	RecipeRepository recipeRepository;
 	
 	@GetMapping("/product-usage")
 	public ResponseEntity<List<ProductUsage>> getAllProductUsage () {
@@ -55,18 +65,28 @@ public class ProductUsageController {
 	public ResponseEntity<ProductUsage> createProductUsage (@RequestBody ProductUsage prodUsage) {
 		try {
 			Product product = productRepository.findByName(prodUsage.getProduct().getName());
-			
+			Uom uom = uomRepository.findByName(prodUsage.getProductUOM().getUomName());
+			Recipe recipe = recipeRepository.findByName(prodUsage.getRecipe().getName());
 			
 			if (product == null) {
 				product = new Product(prodUsage.getProduct().getName());
 				productRepository.save(product);
 			}
 			
+			if (uom == null) {
+				uom = new Uom(prodUsage.getProductUOM().getUomName());
+				uomRepository.save(uom);
+			}
+			
+			if (recipe == null) {
+				return new ResponseEntity<>(prodUsage, HttpStatus.BAD_REQUEST);
+			}
+			
 			ProductUsage _prodUsage = prodUsageRepository
 					.save(new ProductUsage(product,
 										   prodUsage.getProductQuantity(),
-										   prodUsage.getProductUOM(),
-										   prodUsage.getRecipeId()));
+										   uom,
+										   recipe));
 			
 			
 			return new ResponseEntity<>(_prodUsage,  HttpStatus.OK);

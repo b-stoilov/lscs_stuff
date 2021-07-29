@@ -18,23 +18,23 @@ public class ProductUsage {
 	private Product product;
 	
 	@Column(name="product_quantity")
-	private long productQuantity;
+	private double productQuantity;
 	
-	@Column(name="product_uom")
-	private String productUOM;
+	@ManyToOne
+	@JoinColumn(name = "uom_id", referencedColumnName= "uom_id")
+	private Uom productUOM;
 	
-	@Column(name="recipe_id")
-	private long recipeId;
+	@ManyToOne
+	@JoinColumn(name="recipe_id", referencedColumnName = "id")
+	private Recipe recipe;
 	
-	public ProductUsage () {
-		
-	}
+	public ProductUsage () {}
 	
-	public ProductUsage(Product product, long productQuantity, String productUOM, long recipeId) {
+	public ProductUsage(Product product, double productQuantity, Uom productUOM, Recipe recipe) {
 		this.product = product;
 		this.productQuantity = productQuantity;
 		this.productUOM = productUOM;
-		this.recipeId = recipeId;
+		this.recipe = recipe;
 	}
 
 	public long getId() {
@@ -49,25 +49,31 @@ public class ProductUsage {
 		return product;
 	}
 
-	public long getProductQuantity() {
+	public double getProductQuantity() {
 		return productQuantity;
 	}
 
-	public void setProductQuantity(long productQuantity) {
+	public void setProductQuantity(double productQuantity) {
 		this.productQuantity = productQuantity;
 	}
 
-	public String getProductUOM() {
+	public Uom getProductUOM() {
 		return productUOM;
 	}
 
-	public void setProductUOM(String productUOM) {
+	public void setProductUOM(Uom productUOM) {
 		this.productUOM = productUOM;
 	}
-	
-	public long getRecipeId() {
-		return recipeId;
+
+	public Recipe getRecipe() {
+		return recipe;
 	}
+
+	public void setRecipe(Recipe recipe) {
+		this.recipe = recipe;
+	}
+	
+	
 	
 	
 }

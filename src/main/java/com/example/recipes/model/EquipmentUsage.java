@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,22 +41,45 @@ public class EquipmentUsage {
 	@JoinColumn(name = "e_id", referencedColumnName = "id")
 	private Equipment equipment;
 	
-	@Column(name="r_id")
-	private long recipeId;
+	@ManyToOne
+	@JoinColumn(name="r_id", referencedColumnName = "id")
+	private Recipe recipe;
+	
+	@Transient
+	private long recipeIdd;
 
 	
 	public EquipmentUsage() {
 	}
 
 
-	public EquipmentUsage(Equipment equipment, long recipeId) {
+	public EquipmentUsage(Equipment equipment, Recipe recipe) {
 		this.equipment = equipment;
-		this.recipeId = recipeId;
+		this.recipe = recipe;
 	}
+	
+	
+	public EquipmentUsage(Equipment equipment, long recipeIdd) {
+		this.equipment = equipment;
+		this.recipeIdd = recipeIdd;
+	}
+
 
 	public long getId () {
 		return id;
 	}
+	
+	
+
+	public long getRecipeIdd() {
+		return recipeIdd;
+	}
+
+
+	public void setRecipeIdd(long recipeIdd) {
+		this.recipeIdd = recipeIdd;
+	}
+
 
 	public Equipment getEquipment() {
 		return equipment;
@@ -67,14 +91,17 @@ public class EquipmentUsage {
 	}
 
 
-	public long getRecipeId() {
-		return recipeId;
+	public Recipe getRecipe() {
+		return recipe;
 	}
 
 
-	public void setRecipeId(long recipeId) {
-		this.recipeId = recipeId;
+	public void setRecipe(Recipe recipe) {
+		this.recipe = recipe;
 	}
+
+
+
 	
 	
 	
