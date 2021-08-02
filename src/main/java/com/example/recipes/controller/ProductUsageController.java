@@ -97,7 +97,7 @@ public class ProductUsageController {
 	
 	@PutMapping("/product-usage/{id}")
 	public ResponseEntity<ProductUsage> updateProductUsage (@PathVariable("id") long id, @RequestBody ProductUsage prodUsage) {
-			Optional<ProductUsage> productUsageData = prodUsageRepository.findById(id);
+			Optional<ProductUsage> productUsageData = Optional.ofNullable(prodUsageRepository.findById(id));
 			
 			if (productUsageData.isPresent()) {
 				ProductUsage _prodUsage = productUsageData.get();

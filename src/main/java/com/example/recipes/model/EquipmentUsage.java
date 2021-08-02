@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -48,6 +50,9 @@ public class EquipmentUsage {
 	@ManyToOne
 	@JoinColumn(name="r_id", referencedColumnName = "id")
 	private Recipe recipe;
+	
+//	@OneToOne(mappedBy = "equipmentUsage", cascade = CascadeType.ALL)
+//	private RecipeStep recipeStep;
 	
 	@Transient
 	private long recipeIdd;

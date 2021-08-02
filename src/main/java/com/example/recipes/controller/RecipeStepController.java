@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.recipes.helpclasses.RecipeStepId;
+import com.example.recipes.model.EquipmentUsage;
+import com.example.recipes.model.ProductUsage;
 import com.example.recipes.model.Recipe;
 import com.example.recipes.model.RecipeStep;
+import com.example.recipes.repository.EquipmentUsageRepository;
+import com.example.recipes.repository.ProductUsageRepository;
 import com.example.recipes.repository.RecipeRepository;
 import com.example.recipes.repository.RecipeStepRepository;
 
@@ -30,6 +34,12 @@ public class RecipeStepController {
 	
 	@Autowired
 	RecipeRepository recipeRepository;
+	
+	@Autowired
+	EquipmentUsageRepository equipmentUsageRepository;
+	
+	@Autowired
+	ProductUsageRepository productUsageRepository;
 	
 	@GetMapping("/recipe-step")
 	public ResponseEntity<List<RecipeStep>> getAllRecipeSteps () {
@@ -55,6 +65,10 @@ public class RecipeStepController {
 			Recipe recipe = recipeRepository.findById(recipeStep.getTempId());
 			long recipeId = recipeStep.getTempId();
 			long sequence = recipeStepRepository.findByRecipeId(recipeStep.getTempId()).size();
+			
+//			EquipmentUsage equipmentUsage = equipmentUsageRepository.findById(recipeStep.getEqUsId());
+//			
+//			List<ProductUsage> prodUsages = productUsageRepository.findByProductUsageIds(recipeStep.getProdUsIds());
 			
 			if (recipe != null) {
 				RecipeStep recipeStepA = new RecipeStep(recipe, recipeStep.getName());

@@ -10,5 +10,6 @@ import com.example.recipes.model.EquipmentUsage;
 
 public interface EquipmentUsageRepository extends JpaRepository<EquipmentUsage, Long> {
 	List<EquipmentUsage> getById (long id);
+	EquipmentUsage findById (long id);
 
 }

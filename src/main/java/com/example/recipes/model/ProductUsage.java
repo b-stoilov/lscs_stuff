@@ -27,7 +27,7 @@ public class ProductUsage {
 	@ManyToOne
 	@JoinColumn(name="recipe_id", referencedColumnName = "id")
 	private Recipe recipe;
-	
+		
 	@Transient
 	private long recipeIdd;
 	
