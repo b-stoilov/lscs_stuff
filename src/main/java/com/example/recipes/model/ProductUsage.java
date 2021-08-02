@@ -1,5 +1,9 @@
 package com.example.recipes.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -27,6 +31,9 @@ public class ProductUsage {
 	@ManyToOne
 	@JoinColumn(name="recipe_id", referencedColumnName = "id")
 	private Recipe recipe;
+	
+	@ManyToMany(mappedBy = "usedProducts")
+	private Set<RecipeStep> recipeSteps;
 		
 	@Transient
 	private long recipeIdd;

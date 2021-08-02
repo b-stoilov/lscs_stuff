@@ -14,7 +14,7 @@ public class RecipeStepId implements Serializable {
 	private long id;
 
     
-	@Column(name = "sequence")
+	@Column(name = "seq")
     private long sequence;
 	
 	

@@ -51,8 +51,8 @@ public class EquipmentUsage {
 	@JoinColumn(name="r_id", referencedColumnName = "id")
 	private Recipe recipe;
 	
-//	@OneToOne(mappedBy = "equipmentUsage", cascade = CascadeType.ALL)
-//	private RecipeStep recipeStep;
+	@OneToOne(mappedBy = "equipmentUsage", cascade = CascadeType.ALL)
+	private RecipeStep recipeStep;
 	
 	@Transient
 	private long recipeIdd;

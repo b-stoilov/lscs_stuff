@@ -66,12 +66,12 @@ public class RecipeStepController {
 			long recipeId = recipeStep.getTempId();
 			long sequence = recipeStepRepository.findByRecipeId(recipeStep.getTempId()).size();
 			
-//			EquipmentUsage equipmentUsage = equipmentUsageRepository.findById(recipeStep.getEqUsId());
+			EquipmentUsage equipmentUsage = equipmentUsageRepository.findById(recipeStep.getEqUsId());
 //			
 //			List<ProductUsage> prodUsages = productUsageRepository.findByProductUsageIds(recipeStep.getProdUsIds());
 			
 			if (recipe != null) {
-				RecipeStep recipeStepA = new RecipeStep(recipe, recipeStep.getName());
+				RecipeStep recipeStepA = new RecipeStep(recipe, recipeStep.getName(), equipmentUsage);
 
 				recipeStepA.setRecipeStepId(new RecipeStepId(recipeId, sequence + 1));
 				

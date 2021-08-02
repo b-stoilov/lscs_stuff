@@ -1,5 +1,6 @@
 package com.example.recipes.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
@@ -48,21 +51,28 @@ public class RecipeStep {
 	@Column(name = "seq_name")
 	private String name;
 	
-//	@OneToOne
-//	@JoinColumn(name="eu_id", referencedColumnName = "id")
-//	private EquipmentUsage equipmentUsage;
-//	
-//	@OneToMany 
-//	@JoinColumn(name = "pu_id", referencedColumnName = "id")
-//	private List<ProductUsage> productUsages;
+	@OneToOne
+	@JoinColumn(name="eu_id", referencedColumnName = "id")
+	private EquipmentUsage equipmentUsage;
+	
+	@ManyToMany 
+	@JoinTable(
+			name = "products_per_step",
+			joinColumns = {
+			    @JoinColumn(name="rs_id", referencedColumnName = "r_id"),
+			    @JoinColumn(name="rs_seq", referencedColumnName = "seq")
+			},
+			inverseJoinColumns = @JoinColumn(name = "prod_us_id", referencedColumnName = "id")
+			)
+	private Set<ProductUsage> usedProducts;
 
 	public RecipeStep () {
 	}
 	
-	public RecipeStep(Recipe recipe, String name) {
+	public RecipeStep(Recipe recipe, String name, EquipmentUsage equipmentUsage) {
 		this.id = recipe;
 		this.name = name;
-//		this.equipmentUsage = equipmentUsage;
+		this.equipmentUsage = equipmentUsage;
 //		this.productUsages = productUsages;
 	}
 	
@@ -99,13 +109,13 @@ public class RecipeStep {
 		this.prodUsIds = prodUsIds;
 	}
 
-//	public EquipmentUsage getEquipmentUsage() {
-//		return equipmentUsage;
-//	}
-//
-//	public void setEquipmentUsage(EquipmentUsage equipmentUsage) {
-//		this.equipmentUsage = equipmentUsage;
-//	}
+	public EquipmentUsage getEquipmentUsage() {
+		return equipmentUsage;
+	}
+
+	public void setEquipmentUsage(EquipmentUsage equipmentUsage) {
+		this.equipmentUsage = equipmentUsage;
+	}
 
 	public Recipe getRecipe() {
 		return id;
