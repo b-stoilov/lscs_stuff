@@ -27,7 +27,7 @@ public class Recipe {
 	@Column(name = "user_id")
 	private long userId;
 	
-	@OneToMany(mappedBy="recipe", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="id", cascade = CascadeType.ALL)
 	private Set<RecipeStep> recipeSteps;
 	
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)

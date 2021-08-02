@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.recipes.helpclasses.RecipeStepId;
 import com.example.recipes.model.Recipe;
 import com.example.recipes.model.RecipeStep;
 import com.example.recipes.repository.RecipeRepository;
@@ -51,17 +52,19 @@ public class RecipeStepController {
 	@PostMapping("/recipe-step")
 	public ResponseEntity<RecipeStep> addRecipeStep (@RequestBody RecipeStep recipeStep) {
 		try {
-			String recipeName = recipeStep.getRecipe().getName();
-			long sequence = recipeStepRepository.findById(recipeStep.getRecipe().getId()).size();
+			Recipe recipe = recipeRepository.findById(recipeStep.getTempId());
+			long recipeId = recipeStep.getTempId();
+			long sequence = recipeStepRepository.findByRecipeId(recipeStep.getTempId()).size();
 			
-			if (recipeRepository.findByName(recipeName) != null) {
-				RecipeStep recipeStepA = new RecipeStep (recipeStep.getRecipe(), recipeStep.getName());
-				recipeStepA.setSequence(sequence + 1);
+			if (recipe != null) {
+				RecipeStep recipeStepA = new RecipeStep(recipe, recipeStep.getName());
+
+				recipeStepA.setRecipeStepId(new RecipeStepId(recipeId, sequence + 1));
 				
 				
 				recipeStepRepository.save(recipeStepA);
 				
-				return new ResponseEntity<>(recipeStep, HttpStatus.OK);
+				return new ResponseEntity<>(recipeStepA, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 			}
