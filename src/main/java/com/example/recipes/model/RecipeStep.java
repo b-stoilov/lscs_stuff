@@ -57,12 +57,12 @@ public class RecipeStep {
 	
 	@ManyToMany 
 	@JoinTable(
-			name = "products_per_step",
+			name = "prodsperstep",
 			joinColumns = {
-			    @JoinColumn(name="rs_id", referencedColumnName = "r_id"),
-			    @JoinColumn(name="rs_seq", referencedColumnName = "seq")
+			    @JoinColumn(name="rsId", referencedColumnName = "r_id"),
+			    @JoinColumn(name="rsSeq", referencedColumnName = "seq")
 			},
-			inverseJoinColumns = @JoinColumn(name = "prod_us_id", referencedColumnName = "id")
+			inverseJoinColumns = @JoinColumn(name = "prodUsId", referencedColumnName = "id")
 			)
 	private Set<ProductUsage> usedProducts;
 
