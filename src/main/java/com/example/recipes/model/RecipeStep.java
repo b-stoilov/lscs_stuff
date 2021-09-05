@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
@@ -55,7 +56,7 @@ public class RecipeStep {
 	@JoinColumn(name="eu_id", referencedColumnName = "id")
 	private EquipmentUsage equipmentUsage;
 	
-	@ManyToMany 
+	@ManyToMany(cascade = CascadeType.ALL) 
 	@JoinTable(
 			name = "prodsperstep",
 			joinColumns = {
@@ -64,25 +65,47 @@ public class RecipeStep {
 			},
 			inverseJoinColumns = @JoinColumn(name = "prodUsId", referencedColumnName = "id")
 			)
-	private Set<ProductUsage> usedProducts;
+	private List<ProductUsage> usedProducts;
 
 	public RecipeStep () {
 	}
 	
-	public RecipeStep(Recipe recipe, String name, EquipmentUsage equipmentUsage) {
+	public RecipeStep(Recipe recipe, String name, EquipmentUsage equipmentUsage, List<ProductUsage> usedProducts) {
 		this.id = recipe;
 		this.name = name;
 		this.equipmentUsage = equipmentUsage;
-//		this.productUsages = productUsages;
+		this.usedProducts = usedProducts;
 	}
 	
 	
+	public List<ProductUsage> getUsedProducts() {
+		return usedProducts;
+	}
+
+	public void setUsedProducts(List<ProductUsage> usedProducts) {
+		this.usedProducts = usedProducts;
+	}
+
 	public RecipeStep(long tempId, long eqUsId, List<Long> prodUsIds, String name) {
 		this.tempId = tempId;
 		this.name = name;
 		this.eqUsId = eqUsId;
 		this.prodUsIds = prodUsIds;
 	}
+	
+	public RecipeStep(Recipe recipe, String name, EquipmentUsage equipmentUsage) {
+		this.id = recipe;
+		this.name = name;
+		this.equipmentUsage = equipmentUsage;
+//		this.usedProducts = usedProducts;
+	}
+	
+//	public RecipeStep(long eqUsId, List<Long> prodUsIds, String name) {
+//		this.tempId = tempId;
+//		this.name = name;
+//		this.eqUsId = eqUsId;
+//		this.prodUsIds = prodUsIds;
+//	}
 
 	public RecipeStepId getRecipeStepId() {
 		return recipeStepId;

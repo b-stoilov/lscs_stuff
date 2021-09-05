@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.recipes.model.Equipment;
 import com.example.recipes.model.EquipmentUsage;
 import com.example.recipes.model.Recipe;
+import com.example.recipes.model.RecipeStep;
 import com.example.recipes.repository.EquipmentRepository;
 import com.example.recipes.repository.EquipmentUsageRepository;
 import com.example.recipes.repository.RecipeRepository;
@@ -53,6 +55,30 @@ public class EquipmentUsageController {
 		}
 		
 	}
+	
+	@GetMapping("/equipment-usage/{id}")
+	public ResponseEntity<List<EquipmentUsage>> getEquipmentUsageByRecipeId (@PathVariable long id) {
+		try {
+			List<EquipmentUsage> equipmentUsages = eqUsageRepository.findAll();
+			List<EquipmentUsage> wantedEqUsages = new ArrayList<>();
+			
+			for (EquipmentUsage eqUsage : equipmentUsages) {
+				if (eqUsage.getRecipe().getId() == id) {
+					wantedEqUsages.add(eqUsage);
+				}
+			}
+			
+			if (wantedEqUsages.isEmpty()) {
+				return new ResponseEntity<>(wantedEqUsages, HttpStatus.NO_CONTENT);
+			}
+			
+			return new ResponseEntity<> (wantedEqUsages, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
 
 	@PostMapping("/equipment-usage")
 	public ResponseEntity<EquipmentUsage> addUsage (@RequestBody EquipmentUsage equipmentUsage) {
@@ -62,7 +88,7 @@ public class EquipmentUsageController {
 			
 			if (equipment == null) {
 				equipment = new Equipment(equipmentUsage.getEquipment().getEquipmntName());
-				eqRepository.save(equipment);
+				eqRepository.saveAndFlush(equipment);
 			}
 			
 			if (recipe == null) {
@@ -70,7 +96,7 @@ public class EquipmentUsageController {
 			}
 			
 			EquipmentUsage _eqUsage = eqUsageRepository
-					.save(new EquipmentUsage(equipment, recipe));
+					.saveAndFlush(new EquipmentUsage(equipment, recipe));
 			
 			return new ResponseEntity<>(_eqUsage, HttpStatus.OK);
 		} catch (Exception e) {

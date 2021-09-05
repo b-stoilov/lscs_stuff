@@ -74,7 +74,7 @@ public class ProductController {
 		try {
 			if (productRepository.findByName(product.getName()) == null) {
 				Product _product = productRepository
-						.save(new Product(product.getName()));
+						.saveAndFlush(new Product(product.getName()));
 				
 				return new ResponseEntity<>(_product, HttpStatus.CREATED); 
 			}
@@ -96,7 +96,7 @@ public class ProductController {
 			Product _product = productData.get();
 			_product.setName(product.getName());
 			
-			return new ResponseEntity<>(productRepository.save(_product), HttpStatus.OK);
+			return new ResponseEntity<>(productRepository.saveAndFlush(_product), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

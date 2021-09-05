@@ -9,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.recipes.helpclasses.RecipeStepId;
@@ -44,9 +46,7 @@ public class RecipeStepController {
 	@GetMapping("/recipe-step")
 	public ResponseEntity<List<RecipeStep>> getAllRecipeSteps () {
 		try {
-			List<RecipeStep> steps = new ArrayList<>();
-			
-			recipeStepRepository.findAll().forEach(steps::add);
+			List<RecipeStep> steps = recipeStepRepository.findAll();
 			
 			if (steps.isEmpty()) {
 				return new ResponseEntity<>(steps, HttpStatus.NO_CONTENT);
@@ -59,6 +59,57 @@ public class RecipeStepController {
 		
 	}
 	
+	@GetMapping("/recipe-step/{id}")
+	public ResponseEntity<List<RecipeStep>> getRecipeStepsByRecipeId (@PathVariable long id) {
+		try {
+			List<RecipeStep> recipeSteps = recipeStepRepository.findAll();
+			List<RecipeStep> wantedRecipeSteps = new ArrayList<>();
+			
+			for (RecipeStep recipeStep : recipeSteps) {
+				if (recipeStep.getRecipeStepId().getId() == id) {
+					wantedRecipeSteps.add(recipeStep);
+				}
+			}
+			
+			if (wantedRecipeSteps.isEmpty()) {
+				return new ResponseEntity<>(wantedRecipeSteps, HttpStatus.NO_CONTENT);
+			}
+			
+			return new ResponseEntity<> (wantedRecipeSteps, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+//	@GetMapping("/recipe-step?r_id={id}&seq={seq}")
+//	public ResponseEntity<RecipeStep> getEquipmentNameByRecipeStepId (@RequestParam("r_id") long r_id,
+//			@RequestParam("seq") int seq) {
+//		try {
+//			RecipeStep recipeStep = recipeStepRepository.getRecipeStepByRecipeStepId(r_id, seq);
+//			
+//			return new ResponseEntity<> (recipeStep, HttpStatus.OK);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
+	
+	@GetMapping("/recipe-step?r_id={id}&seq={seq}")
+	public ResponseEntity<String> getEquipmentNameByRecipeStepId (@RequestParam("r_id") long r_id,
+			@RequestParam("seq") long seq) {
+		try {
+			String eqName = recipeStepRepository.getEquipmentName(r_id, seq);
+			
+			return new ResponseEntity<> (eqName, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
 	@PostMapping("/recipe-step")
 	public ResponseEntity<RecipeStep> addRecipeStep (@RequestBody RecipeStep recipeStep) {
 		try {
@@ -67,16 +118,18 @@ public class RecipeStepController {
 			long sequence = recipeStepRepository.findByRecipeId(recipeStep.getTempId()).size();
 			
 			EquipmentUsage equipmentUsage = equipmentUsageRepository.findById(recipeStep.getEqUsId());
-//			
-//			List<ProductUsage> prodUsages = productUsageRepository.findByProductUsageIds(recipeStep.getProdUsIds());
+			
+			List<ProductUsage> prodUsages = productUsageRepository.findByProductUsageIds(recipeStep.getProdUsIds());
 			
 			if (recipe != null) {
 				RecipeStep recipeStepA = new RecipeStep(recipe, recipeStep.getName(), equipmentUsage);
 
 				recipeStepA.setRecipeStepId(new RecipeStepId(recipeId, sequence + 1));
+				recipeStepA.setUsedProducts(prodUsages);
 				
 				
-				recipeStepRepository.save(recipeStepA);
+				recipeStepRepository.saveAndFlush(recipeStepA);
+	
 				
 				return new ResponseEntity<>(recipeStepA, HttpStatus.OK);
 			} else {

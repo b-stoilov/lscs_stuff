@@ -61,6 +61,27 @@ public class ProductUsageController {
 		}
 	}
 	
+	@GetMapping("/product-usage/{id}")
+	public ResponseEntity<List<ProductUsage>> getProductsPerRecipe (@PathVariable long id) {
+		try {
+			List<ProductUsage> allProdUsages = prodUsageRepository.findAll();
+			List<ProductUsage> wantedProdUsages = new ArrayList<>();
+		
+			for (ProductUsage prodUsage : allProdUsages) {
+				if (prodUsage.getRecipe().getId() == id) {
+					wantedProdUsages.add(prodUsage);
+				}
+			}
+		
+			return new ResponseEntity<>(wantedProdUsages, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
+	
+	
 	@PostMapping("/product-usage")
 	public ResponseEntity<ProductUsage> createProductUsage (@RequestBody ProductUsage prodUsage) {
 		try {
@@ -70,12 +91,12 @@ public class ProductUsageController {
 			
 			if (product == null) {
 				product = new Product(prodUsage.getProduct().getName());
-				productRepository.save(product);
+				productRepository.saveAndFlush(product);
 			}
 			
 			if (uom == null) {
 				uom = new Uom(prodUsage.getProductUOM().getUomName());
-				uomRepository.save(uom);
+				uomRepository.saveAndFlush(uom);
 			}
 			
 			if (recipe == null) {
@@ -83,7 +104,7 @@ public class ProductUsageController {
 			}
 			
 			ProductUsage _prodUsage = prodUsageRepository
-					.save(new ProductUsage(product,
+					.saveAndFlush(new ProductUsage(product,
 										   prodUsage.getProductQuantity(),
 										   uom,
 										   recipe));
@@ -95,21 +116,21 @@ public class ProductUsageController {
 		}
 	}
 	
-	@PutMapping("/product-usage/{id}")
-	public ResponseEntity<ProductUsage> updateProductUsage (@PathVariable("id") long id, @RequestBody ProductUsage prodUsage) {
-			Optional<ProductUsage> productUsageData = Optional.ofNullable(prodUsageRepository.findById(id));
-			
-			if (productUsageData.isPresent()) {
-				ProductUsage _prodUsage = productUsageData.get();
-				_prodUsage.setProduct(prodUsage.getProduct());
-				_prodUsage.setProductQuantity(prodUsage.getProductQuantity());
-				_prodUsage.setProductUOM(prodUsage.getProductUOM());
-				
-				return new ResponseEntity<>(prodUsageRepository.save(_prodUsage), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-	}
+//	@PutMapping("/product-usage/{id}")
+//	public ResponseEntity<ProductUsage> updateProductUsage (@PathVariable("id") long id, @RequestBody ProductUsage prodUsage) {
+//			Optional<ProductUsage> productUsageData = Optional.ofNullable(prodUsageRepository.findById(id));
+//			
+//			if (productUsageData.isPresent()) {
+//				ProductUsage _prodUsage = productUsageData.get();
+//				_prodUsage.setProduct(prodUsage.getProduct());
+//				_prodUsage.setProductQuantity(prodUsage.getProductQuantity());
+//				_prodUsage.setProductUOM(prodUsage.getProductUOM());
+//				
+//				return new ResponseEntity<>(prodUsageRepository.saveAndFlush(_prodUsage), HttpStatus.OK);
+//			} else {
+//				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//			}
+//	}
 
 	@DeleteMapping("/product-usage/{id}")
 	public ResponseEntity<ProductUsage> deleteProductUsage (@PathVariable("id") long id) {

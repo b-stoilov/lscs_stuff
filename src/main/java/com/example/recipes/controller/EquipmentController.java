@@ -47,7 +47,7 @@ public class EquipmentController {
 		try {
 			if (equipmentRepository.findByName(equipment.getEquipmntName()) == null) {
 				Equipment _equipment = equipmentRepository
-					.save(new Equipment(equipment.getEquipmntName()));
+					.saveAndFlush(new Equipment(equipment.getEquipmntName()));
 			
 				return new ResponseEntity<>(_equipment, HttpStatus.OK);
 			}

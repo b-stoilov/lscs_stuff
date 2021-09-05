@@ -51,7 +51,7 @@ public class RecipeController {
 				return new ResponseEntity<>(recipe, HttpStatus.CONFLICT);
 			} 
 			
-			recipeRepository.save(recipe);
+			recipeRepository.saveAndFlush(recipe);
 			
 			return new ResponseEntity<>(recipe, HttpStatus.OK);
 		} catch (Exception e) {

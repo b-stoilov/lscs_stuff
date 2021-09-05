@@ -51,7 +51,7 @@ public class UomController {
 			
 			if (_uom == null) {
 				_uom = new Uom(uom.getUomName());
-				uomRepository.save(_uom);
+				uomRepository.saveAndFlush(_uom);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 			}
